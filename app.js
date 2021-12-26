@@ -1,10 +1,6 @@
 
-let idChromeEx = "ofhcjhcmhoaebfldihpfefjkbpkeblcd";
-
-
 let friends = new Array();
 let favourites = new Array();
-
 
 function Friend(userEl)
 {
@@ -20,10 +16,12 @@ function Friend(userEl)
 
     this.addFavourite = function()
     {
-        userEl.getElementsByClassName("MPPL-favouriteStar")[0].classList.add("active");
-        userEl.getElementsByClassName("MPPL-addFav")[0].classList.add("active")
+        this.addVisualFavourite();
         
         favourites.push(this.name());
+        chrome.storage.local.set({ "MPPL-Favourites": favourites }, function(){
+            console.log("MPPL Loaded data for favourites (Added)");
+        });
     }
     this.removeFavourite = function()
     {
@@ -38,40 +36,40 @@ function Friend(userEl)
                 break;
             }
         }
+
+        chrome.storage.local.set({ "MPPL-Favourites": favourites }, function(){
+            console.log("MPPL Loaded data for favourites (Removed)");
+        });
+    }
+    this.addVisualFavourite = function()
+    {
+        userEl.getElementsByClassName("MPPL-favouriteStar")[0].classList.add("active");
+        userEl.getElementsByClassName("MPPL-addFav")[0].classList.add("active");
     }
 }
 
-function GetLink(link)
+
+try
 {
-    return "chrome-extension://" + idChromeEx + "/" + link;
+    chrome.storage.local.get(["MPPL-Favourites"], function(items){
+        favourites = items["MPPL-Favourites"];
+    });
+}
+catch
+{
+    console.log("Not found data");
 }
 
+
 $(document).ready(function(){
-    
-    /*
-    $(document).on("click", "#PL-close-friend-list", function()
-    {
-        $('.friends-box').removeClass('show');
-        $('.friends-box > ui-button').attr('aria-expanded', 'false');
-        $('.friends-box > ui-button').removeAttr('aria-controls');
-        $('.friends-dropdown-menu').remove();
-    });
-    */
+
+    $("footer").append('<div class="app-version">Plugin Pony Town UI: <b>1.1.0</b><div class="text-nowrap d-inline d-sm-block">by <a target="_blank" href="https://www.youtube.com/channel/UC-X7_-qML3aXqrDQ2UKLFkA">Mariana Ponyriama</a></div></div>');
+
     $(document).on("DOMNodeInserted", function(e)
     {
-        /*
         if($(e.target).hasClass("friends-dropdown-menu"))
         {
-            $(".dropdown-header").append("<button id='PL-close-friend-list'> <img src=" + GetLink("images/delete.svg") +"> </button>");
-        }
-        */
-       
-        if($(e.target).hasClass("friends-item"))
-        {
-            friends.push(new Friend(e.target));
-        }
-        if($(e.target).hasClass("friends-dropdown-menu"))
-        {
+            friends = new Array();
             $(".friends-dropdown-menu").append("<input id='MPPL-searchFriend' class='MPPL form-control' type='text' placeholder='Search'>");
 
             $("#MPPL-searchFriend").keyup(function (e) {
@@ -117,6 +115,8 @@ $(document).ready(function(){
                 $("#MPPL-searchFriend").removeClass("hide");
             });
 
+            
+
             $(".MPPL-favourite").click(function(e)
             {
                 frie: for(let i = 0; i < friends.length; i++)
@@ -134,6 +134,30 @@ $(document).ready(function(){
                 $("#MPPL-searchFriend").addClass("hide");
             });
         }
+
+        
+
+        if($(e.target).hasClass("friends-item"))
+        {
+            let friend = new Friend(e.target);
+            friends.push(friend);
+
+            let UserName = e.target.getElementsByClassName("text-muted friends-item-account")[0];
+
+            
+            $(UserName).on("DOMSubtreeModified", function(){
+                for(let i = 0; i < favourites.length; i++)
+                {
+                    if(favourites[i] == friend.name())
+                    {
+                        friend.addVisualFavourite();
+                        break;
+                    }
+                }
+            });
+            
+        }
+
         if($(e.target).hasClass("friends-item"))
         {
             $(e.target).on("click", function()
@@ -171,6 +195,8 @@ $(document).ready(function(){
                 
             });
         }
+        
+        
     });
     
    

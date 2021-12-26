@@ -206,6 +206,7 @@ settings-box
 
     animation: anim-option-friend 0.3s ease;
 }
+
 .options-dropdown-menu::after
 {
     border-bottom: 6px solid #393939 !important;
@@ -219,7 +220,56 @@ settings-box
 {
     color: #585858 !important;
 }
+.friends-dropdown-menu .dropdown-menu.dropdown-menu-right
+{
+    background-color: #252625;
+    color: #fff;
+    padding: 0 !important;
+    border-radius: 5px;
+    overflow: hidden;
+    animation: anim-option-friend 0.2s ease;
+}
+.friends-dropdown-menu .dropdown-menu.dropdown-menu-right a
+{
+    transition: 0.2 ease;
+}
 .dropdown-divider
 {
     border-top: 1px solid #5c5c5c !important;
+}
+/* Pony Profile */
+#pony-box .portrait-box-cover
+{
+    border-color: #222 !important;
+    border-radius: 10px !important;
+    overflow: hidden !important;
+}
+#pony-box canvas
+{
+    border-radius: 0 !important;
+    border-radius: 10px !important;
+}
+#pony-box .pony-box-rect
+{
+    background: #333334 !important;
+    color: #fff !important;
+}
+#pony-box .site-info
+{
+    color: #fff !important;
+}
+.pony-box-tags
+{
+    padding-left: 30px !important;
+}
+#pony-box .btn-group
+{
+    margin-left: 13px !important;
+    
+}
+#pony-box .btn
+{
+    color: #fff !important;
+    background-color: #333334 !important;
+    border: none;
 }
