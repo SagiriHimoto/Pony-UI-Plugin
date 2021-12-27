@@ -33,7 +33,7 @@
     border-radius: 5px !important;
     margin: 0 !important;
     z-index: 1 !important;
-    background-color: #333333fa !important;
+    background-color: #fcfcfcfa !important;
 
     display: flex !important;
     flex-direction: column !important;
@@ -41,7 +41,11 @@
     animation: anim-friend 0.3s ease;
     animation-fill-mode: forwards;
 }
-.friends-dropdown-menu::after
+.MPPL-S-DarkTheme .friends-dropdown-menu
+{
+    background-color: #333333fa !important;
+}
+.MPPL-S-DarkTheme .friends-dropdown-menu::after
 {
     border-bottom: 6px solid #555 !important;
 }
@@ -49,14 +53,16 @@
 {
     order: 1;
 }
-.friends-item-account
+.MPPL-S-DarkTheme .friends-item-account
 {
     color: #fff !important;
 }
-.portrait-box.small
+.MPPL-S-square-portrait .portrait-box.small
 {
     border-radius: 5px !important;
 }
+
+
 .friends-item
 {
     outline: none !important;
@@ -64,7 +70,7 @@
     transition: 0.3s ease;
     position: relative;
 }
-.friends-item:hover
+.MPPL-S-DarkTheme .friends-item:hover
 {
     background-color: #545454 !important;
 }
@@ -72,15 +78,15 @@
 {
     display: none !important;
 }
-div .text-online
+.MPPL-S-DarkTheme div .text-online
 {
     color: #60ff52 !important;
 }
-div .text-looking
+.MPPL-S-DarkTheme div .text-looking
 {
     color: #4dd0ff !important;
 }
-div .text-busy
+.MPPL-S-DarkTheme div .text-busy
 {
     color: #ff766a !important;
 }
@@ -108,9 +114,34 @@ settings-box
 {
     display: none;
 }
-.form-control
+.friends-dropdown-menu .form-control
+{
+    background-color: #e6e6e6 !important;
+    border: 1px solid #c5c5c5 !important;
+    border-radius: 0.25rem !important;
+    color: rgb(34, 34, 34) !important;
+}
+.friends-dropdown-menu .form-control:focus
+{
+    background-color: #e6e6e6 !important;
+    border: 1px solid #c5c5c5 !important;
+    color: rgb(34, 34, 34) !important;
+}
+.friends-dropdown-menu .form-control:disabled
+{
+    opacity: 0.5;
+}
+.MPPL-S-DarkTheme .friends-dropdown-menu .form-control
 {
     border: 1px solid #333 !important;
+    background-color: #222 !important;
+    color: #ddd !important;
+}
+.MPPL-S-DarkTheme .friends-dropdown-menu .form-control:focus
+{
+    border: 1px solid #333 !important;
+    background-color: #222 !important;
+    color: #ddd !important;
 }
 #MPPL-favouriteFriends
 {
@@ -122,10 +153,14 @@ settings-box
     width: 50%;
     text-align: center;
     padding: 10px;
-    color: #5d6368 !important;
+    color: #94989c !important;
     cursor: pointer;
     transition: 0.3s ease;
     margin-bottom: 10px;
+}
+.MPPL-S-DarkTheme .MPPL-friends
+{
+    color: #5d6368 !important;
 }
 .MPPL-friends:hover
 {
@@ -134,17 +169,22 @@ settings-box
 }
 .MPPL-friends.active
 {
+    border-bottom: 1px solid rgb(34, 34, 34);
+    color: rgb(34, 34, 34) !important;
+}
+.MPPL-S-DarkTheme .MPPL-friends.active
+{
     border-bottom: 1px solid #Fff;
     color: #fff !important;
-    
 }
+
 .MPPL-addFav
 {
     position: absolute;
     right: 0;
     top: 50%;
     transform: translateY(-50%);
-    background: #1d1d1d;
+    background: #b8b8b8;
     height: 100%;
     display: flex;
     
@@ -153,17 +193,33 @@ settings-box
     transition: 0.2s ease;
     border-radius: 5px;
 }
+.MPPL-S-DarkTheme .MPPL-addFav
+{
+    background: #1d1d1d;
+}
 .MPPL-addFav svg
 {
-    fill: #cecece;
+    fill: #ebebeb;
     width: 0%;
     transition: 0.2s ease;
 }
+.MPPL-S-DarkTheme .MPPL-addFav svg
+{
+    fill: #cecece;
+}
 .MPPL-addFav:hover
+{
+    fill: rgb(243, 255, 175);
+}
+.MPPL-S-DarkTheme .MPPL-addFav:hover
 {
     fill: rgb(247, 255, 202);
 }
 .MPPL-addFav.active svg
+{
+    fill: rgb(255, 202, 28);
+}
+.MPPL-S-DarkTheme .MPPL-addFav.active svg
 {
     fill: rgb(240, 255, 34);
 }
@@ -174,7 +230,7 @@ settings-box
     left: 0;
     bottom: -1px;
     width: 16px;
-    fill: rgb(240, 255, 34);
+    fill: rgb(255, 202, 28);
 }
 .MPPL-favouriteStar.active
 {
@@ -182,8 +238,13 @@ settings-box
 }
 .MPPL-favouriteStar svg
 {
-    fill: rgb(240, 255, 34);
+    fill: rgb(255, 202, 28);
     width: 100%;
+}
+.MPPL-S-DarkTheme .MPPL-favouriteStar,
+.MPPL-S-DarkTheme .MPPL-favouriteStar svg
+{
+    fill: rgb(240, 255, 34);
 }
 .friends-item:hover .MPPL-addFav
 {
@@ -198,13 +259,18 @@ settings-box
 
 .options-dropdown-menu
 {
-    background-color: #252525 !important;
-    color: #fff !important;
+    background-color: #f4f4f4 !important;
+    color: #000 !important;
     padding: 0 !important;
     overflow: hidden;
     border-radius: 5px !important;
 
     animation: anim-option-friend 0.3s ease;
+}
+.MPPL-S-DarkTheme .options-dropdown-menu
+{
+    background-color: #252525 !important;
+    color: #fff !important;
 }
 
 .options-dropdown-menu::after
@@ -222,12 +288,15 @@ settings-box
 }
 .friends-dropdown-menu .dropdown-menu.dropdown-menu-right
 {
-    background-color: #252625;
-    color: #fff;
     padding: 0 !important;
     border-radius: 5px;
     overflow: hidden;
     animation: anim-option-friend 0.2s ease;
+}
+.MPPL-S-DarkTheme .friends-dropdown-menu .dropdown-menu.dropdown-menu-right
+{
+    background-color: #252625;
+    color: #fff;   
 }
 .friends-dropdown-menu .dropdown-menu.dropdown-menu-right a
 {
@@ -235,41 +304,93 @@ settings-box
 }
 .dropdown-divider
 {
+    border-top: 1px solid #949494 !important;
+}
+.MPPL-S-DarkTheme .dropdown-divider
+{
     border-top: 1px solid #5c5c5c !important;
 }
 /* Pony Profile */
-#pony-box .portrait-box-cover
+.MPPL-S-DarkTheme .portrait-box-cover
 {
     border-color: #222 !important;
-    border-radius: 10px !important;
-    overflow: hidden !important;
 }
-#pony-box canvas
+.MPPL-S-square-portrait #pony-box .portrait-box-cover
+{
+    overflow: hidden !important;
+    border-radius: 10px !important;
+}
+.MPPL-S-square-portrait #pony-box canvas
 {
     border-radius: 0 !important;
     border-radius: 10px !important;
 }
-#pony-box .pony-box-rect
+.MPPL-S-DarkTheme #pony-box .pony-box-rect
 {
     background: #333334 !important;
     color: #fff !important;
 }
-#pony-box .site-info
+.MPPL-S-DarkTheme #pony-box .site-info
 {
     color: #fff !important;
 }
-.pony-box-tags
+.MPPL-S-square-portrait .pony-box-tags
 {
     padding-left: 30px !important;
 }
-#pony-box .btn-group
+.MPPL-S-square-portrait #pony-box .btn-group
 {
     margin-left: 13px !important;
     
 }
-#pony-box .btn
+.MPPL-S-DarkTheme #pony-box .btn.dropdown-toggle
 {
     color: #fff !important;
     background-color: #333334 !important;
     border: none;
+}
+#pony-box .dropdown-toggle
+{
+    transition: 0.3s ease;
+}
+.MPPL-S-DarkTheme #pony-box .dropdown-toggle:hover
+{
+    background-color: #fff !important;
+    color: #000 !important;
+}
+#pony-box .dropdown-toggle::after
+{
+    transition: 0.3s ease;
+}
+#pony-box .dropdown-toggle[aria-expanded="true"]::after
+{
+    transform: rotate(180deg);
+}
+#pony-box .dropdown-menu
+{
+    background-color: #f4f4f4 !important;
+    color: #000 !important;
+    padding: 0 !important;
+    overflow: hidden;
+    border-radius: 5px !important;
+
+    animation: anim-option-friend 0.3s ease;
+}
+.MPPL-S-DarkTheme #pony-box .dropdown-menu
+{
+    background-color: #252525 !important;
+    color: #fff !important;
+}
+.MPPL-S-DarkTheme #pony-box .dropdown-menu::after
+{
+    border-bottom: 6px solid #393939 !important;
+}
+#pony-box .dropdown-menu button
+{
+    transition: 0.2s ease;
+    padding: 0.8rem 1.5rem !important;
+}
+.MPPL-S-DarkTheme #pony-box .dropdown-menu button:disabled
+{
+    color: #585858 !important;
 }

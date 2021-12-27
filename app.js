@@ -1,57 +1,59 @@
 
 let friends = new Array();
 let favourites = new Array();
+let settingsData;
 
-function Friend(userEl)
-{
+function Friend(userEl) {
     this.element = userEl;
-    this.nicknamePony = function()
-    {
+    this.nicknamePony = function () {
         return userEl.getElementsByClassName("friends-item-name")[0].textContent.toLowerCase();
     }
-    this.name = function()
-    {
+    this.name = function () {
         return userEl.getElementsByClassName("text-muted friends-item-account")[0].textContent;
     }
 
-    this.addFavourite = function()
-    {
+    this.addFavourite = function () {
         this.addVisualFavourite();
-        
+
         favourites.push(this.name());
-        chrome.storage.local.set({ "MPPL-Favourites": favourites }, function(){
+        chrome.storage.local.set({ "MPPL-Favourites": favourites }, function () {
             console.log("MPPL Loaded data for favourites (Added)");
         });
     }
-    this.removeFavourite = function()
-    {
+    this.removeFavourite = function () {
         userEl.getElementsByClassName("MPPL-favouriteStar")[0].classList.remove("active");
         userEl.getElementsByClassName("MPPL-addFav")[0].classList.remove("active")
-        
-        for(let i = 0; i < favourites.length; i++)
-        {
-            if(favourites[i] == this.name())
-            {
+
+        for (let i = 0; i < favourites.length; i++) {
+            if (favourites[i] == this.name()) {
                 favourites.splice(i, 1);
                 break;
             }
         }
 
-        chrome.storage.local.set({ "MPPL-Favourites": favourites }, function(){
+        chrome.storage.local.set({ "MPPL-Favourites": favourites }, function () {
             console.log("MPPL Loaded data for favourites (Removed)");
         });
     }
-    this.addVisualFavourite = function()
-    {
+    this.addVisualFavourite = function () {
         userEl.getElementsByClassName("MPPL-favouriteStar")[0].classList.add("active");
         userEl.getElementsByClassName("MPPL-addFav")[0].classList.add("active");
     }
 }
-
-
-try
+function Settings()
 {
-    chrome.storage.local.get(["MPPL-Favourites"], function(items){
+    this.darkTheme = true;
+
+    this.loadData = function()
+    {
+        chrome.storage.local.set({ "MPPL-settings-data": settings }, function () {
+            console.log("MPPL Loaded data for settings (Added)");
+        });
+    }
+}
+
+try {
+    chrome.storage.local.get(["MPPL-Favourites"], function (items) {
         favourites = items["MPPL-Favourites"];
     });
 }
@@ -59,40 +61,58 @@ catch
 {
     console.log("Not found data");
 }
+try {
+    chrome.storage.local.get(["MPPL-settings-data"], function (items) {
+        settingsData = items["MPPL-settings-data"];
+    });
 
+    if(settingsData == "")
+    {
+        settingsData = standartSetting();
+    }
+}
+catch
+{
+    console.log("Not found data");
+}
 
-$(document).ready(function(){
+function standartSetting()
+{
+    let standart = new Settings();
+    standart.darkTheme = false;
+    
+    return standartSetting();
+}
+
+$(document).ready(function () {
 
     $("footer").append('<div class="app-version">Plugin Pony Town UI: <b>1.1.0</b><div class="text-nowrap d-inline d-sm-block">by <a target="_blank" href="https://www.youtube.com/channel/UC-X7_-qML3aXqrDQ2UKLFkA">Mariana Ponyriama</a></div></div>');
 
-    $(document).on("DOMNodeInserted", function(e)
-    {
-        if($(e.target).hasClass("friends-dropdown-menu"))
-        {
+    $(document).on("DOMNodeInserted", function (e) {
+        if ($(e.target).hasClass("friends-dropdown-menu")) {
             friends = new Array();
+            searchFavourite = false;
+
             $(".friends-dropdown-menu").append("<input id='MPPL-searchFriend' class='MPPL form-control' type='text' placeholder='Search'>");
 
             $("#MPPL-searchFriend").keyup(function (e) {
 
                 let value = $("#MPPL-searchFriend").val().toLowerCase();
 
-                if(value == "")
-                {
-                    for(let i = 0; i < friends.length; i++)
-                    {
+                if (value == "") {
+                    for (let i = 0; i < friends.length; i++) {
                         $(friends[i].element).removeClass("hide");
                     }
                 }
-                else
-                {
-                    for(let i = 0; i < friends.length; i++)
-                    {
-                        if((friends[i].nicknamePony()).includes(value) || (friends[i].name().toLowerCase().includes(value)))
-                        {
+                else {
+                    for (let i = 0; i < friends.length; i++) {
+                        let char1 = friends[i].nicknamePony().includes(value);
+                        let char2 = friends[i].name().toLowerCase().includes(value);
+
+                        if (char1 || char2) {
                             $(friends[i].element).removeClass("hide");
                         }
-                        else
-                        {
+                        else {
                             $(friends[i].element).addClass("hide");
                         }
                     }
@@ -101,103 +121,85 @@ $(document).ready(function(){
 
             $(".friends-dropdown-menu").append("<div id='MPPL-favouriteFriends' class='MPPL'><div class='MPPL-all-friends MPPL-friends active'>Все</div><div class='MPPL-favourite MPPL-friends'>Избранное</div></div>");
 
-            $(".MPPL-friends").click(function(e)
-            {
+            $(".MPPL-friends").click(function (e) {
                 $(".MPPL-friends").removeClass("active");
                 $(e.target).addClass("active");
+
+                $("#MPPL-searchFriend").prop("disabled", true);
             });
-            $(".MPPL-all-friends").click(function(e)
-            {
-                for(let i = 0; i < friends.length; i++)
-                {
+            $(".MPPL-all-friends").click(function (e) {
+                for (let i = 0; i < friends.length; i++) {
                     $(friends[i].element).removeClass("hide");
                 }
-                $("#MPPL-searchFriend").removeClass("hide");
+                $("#MPPL-searchFriend").removeAttr("disabled");
             });
 
-            
 
-            $(".MPPL-favourite").click(function(e)
-            {
-                frie: for(let i = 0; i < friends.length; i++)
-                {
-                    fav: for(let s = 0; s < favourites.length; s++)
-                    {
-                        if(friends[i].name() == favourites[s])
-                        {
+
+            $(".MPPL-favourite").click(function (e) {
+                frie: for (let i = 0; i < friends.length; i++) {
+                    fav: for (let s = 0; s < favourites.length; s++) {
+                        if (friends[i].name() == favourites[s]) {
                             $(friends[i].element).removeClass("hide");
                             continue frie;
                         }
                     }
                     $(friends[i].element).addClass("hide");
                 }
-                $("#MPPL-searchFriend").addClass("hide");
             });
         }
 
-        
 
-        if($(e.target).hasClass("friends-item"))
-        {
+
+        if ($(e.target).hasClass("friends-item")) {
             let friend = new Friend(e.target);
             friends.push(friend);
 
             let UserName = e.target.getElementsByClassName("text-muted friends-item-account")[0];
 
-            
-            $(UserName).on("DOMSubtreeModified", function(){
-                for(let i = 0; i < favourites.length; i++)
-                {
-                    if(favourites[i] == friend.name())
-                    {
+
+            $(UserName).on("DOMSubtreeModified", function () {
+                for (let i = 0; i < favourites.length; i++) {
+                    if (favourites[i] == friend.name()) {
                         friend.addVisualFavourite();
                         break;
                     }
                 }
             });
-            
+
         }
 
-        if($(e.target).hasClass("friends-item"))
-        {
-            $(e.target).on("click", function()
-            {
+        if ($(e.target).hasClass("friends-item")) {
+            $(e.target).on("click", function () {
                 friends[0].nicknamePony();
             });
             $(e.target).append("<div class='MPPL-addFav'><svg version='1.1' id='Слой_1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' x='0px' y='0px'viewBox='0 0 24 24' style='enable-background:new 0 0 24 24;' xml:space='preserve' fill='#323230'><path class='st0' d='M12.5,1.6l3,6.3c0.1,0.2,0.2,0.3,0.4,0.3l6.9,1c0.5,0.1,0.6,0.6,0.3,1l-5,4.8C18,15.1,18,15.2,18,15.4l1.2,6.8c0.1,0.5-0.4,0.8-0.8,0.6l-6.1-3.3c-0.2-0.1-0.4-0.1-0.5,0l-6.1,3.3c-0.4,0.2-0.9-0.1-0.8-0.6L6,15.4c0-0.2,0-0.4-0.2-0.5l-5-4.8c-0.3-0.3-0.2-0.9,0.3-1l6.9-1c0.2,0,0.3-0.1,0.4-0.3l3-6.3C11.7,1.2,12.3,1.2,12.5,1.6z'/></svg></div>");
             $(e.target).append("<div class='MPPL-favouriteStar'><svg version='1.1' id='Слой_1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' x='0px' y='0px'viewBox='0 0 24 24' style='enable-background:new 0 0 24 24;' xml:space='preserve' fill='#323230'><path class='st0' d='M12.5,1.6l3,6.3c0.1,0.2,0.2,0.3,0.4,0.3l6.9,1c0.5,0.1,0.6,0.6,0.3,1l-5,4.8C18,15.1,18,15.2,18,15.4l1.2,6.8c0.1,0.5-0.4,0.8-0.8,0.6l-6.1-3.3c-0.2-0.1-0.4-0.1-0.5,0l-6.1,3.3c-0.4,0.2-0.9-0.1-0.8-0.6L6,15.4c0-0.2,0-0.4-0.2-0.5l-5-4.8c-0.3-0.3-0.2-0.9,0.3-1l6.9-1c0.2,0,0.3-0.1,0.4-0.3l3-6.3C11.7,1.2,12.3,1.2,12.5,1.6z'/></svg></div>");
 
-            $(e.target).children(".MPPL-addFav").click(function()
-            {
+            $(e.target).children(".MPPL-addFav").click(function () {
                 let name = e.target.getElementsByClassName("text-muted friends-item-account")[0].textContent;
-                if($(e.target).children(".MPPL-addFav").hasClass("active"))
-                {
-                    for(let i = 0; i < friends.length; i++)
-                    {
-                        if(name == friends[i].name())
-                        {
+                if ($(e.target).children(".MPPL-addFav").hasClass("active")) {
+                    for (let i = 0; i < friends.length; i++) {
+                        if (name == friends[i].name()) {
                             friends[i].removeFavourite();
                             break;
                         }
                     }
                 }
-                else
-                {
-                    for(let i = 0; i < friends.length; i++)
-                    {
-                        if(name == friends[i].name())
-                        {
+                else {
+                    for (let i = 0; i < friends.length; i++) {
+                        if (name == friends[i].name()) {
                             friends[i].addFavourite();
                             break;
                         }
                     }
                 }
-                
+
             });
         }
-        
-        
+
+
     });
-    
-   
+
+
 });
