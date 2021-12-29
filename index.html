@@ -7,15 +7,34 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-
+  <link rel="stylesheet" href="style-theme.css">
 </head>
 
 <body>
 
-  <div class="app-version">
-    Plugin Pony Town UI: <b>1.1.0</b>
-    <div class="text-nowrap d-inline d-sm-block">
-      by <a href="https://www.youtube.com/channel/UC-X7_-qML3aXqrDQ2UKLFkA">Mariana Ponyriama</a> 
+  <div class="MPPL-container">
+    <div class="MPPL-settings">
+      <div class="MPPL-modal-header">Settings for Plugin</div>
+      <div class="MPPL-modal-content">
+
+        <div class="item">
+          <div class="top">
+            <input type="checkbox" name="" id="darkTheme"><label for="darkTheme"></label>
+          </div>
+          <div class="subtop"><label for="darkTheme"></label></div>
+        </div>
+
+        <div class="item"><div class="top"><input type="checkbox" name="" id="darkTheme"><label for="darkTheme"></label></div></div>
+        
+      </div>
+      <div class="MPPL-modal-footer">
+        <div class="MPPL-left">
+          <div class="MPPL-version-setting">Version '+ versionPlugin +' by <a href="'+ linkToAuthor +'"
+              target="_blank">Mariana Ponyriama</a></div>
+        </div>
+        <div class="MPPL-right"><button type="button" class="btn" id="MPPL-reset-plugin">Reset</button><button
+            type="button" class="btn" id="MPPL-close-plugin">Close</button></div>
+      </div>
     </div>
   </div>
 
