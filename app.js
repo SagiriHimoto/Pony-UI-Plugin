@@ -1,10 +1,125 @@
 
+
+// Enums
+const noneEnum = 1;
+
+// For value
+const lowEnum = 2;
+const middleEnum = 3;
+const highEnum = 4;
+const ultraEnum = 5;
+const PonyTownEnum = 0;
+
+// Type of filter for game
+const blurE = 2
+const brightness = 3;
+const contrast = 4;
+const grayscale = 5;
+const hueRotate = 6;
+const invert = 7;
+const sepia = 8;
+
+function ReturnBorderRound(Enum)
+{
+    switch(Enum)
+    {
+        case noneEnum:
+            return "MPPL-M-S-BorderRadius-none";
+        case lowEnum:
+            return "MPPL-M-S-BorderRadius-low";
+        case middleEnum:
+            return "MPPL-M-S-BorderRadius-middle";
+        case highEnum:
+            return "MPPL-M-S-BorderRadius-high";
+        case ultraEnum:
+            return "MPPL-M-S-BorderRadius-ultra";
+        case PonyTownEnum:
+            return "";
+    }
+}
+function ReturnBackgroundBlur(Enum)
+{
+    switch(Enum)
+    {
+        case noneEnum:
+            return "MPPL-M-S-BackgroundBlur-none";
+        case lowEnum:
+            return "MPPL-M-S-BackgroundBlur-low";
+        case middleEnum:
+            return "MPPL-M-S-BackgroundBlur-medium";
+        case highEnum:
+            return "MPPL-M-S-BackgroundBlur-high";
+    }
+}
+
+function ReturnOpacityWindow(Enum)
+{
+    switch(Enum)
+    {
+        case noneEnum:
+            return "MPPL-M-S-opacityWindow-none";
+        case lowEnum:
+            return "MPPL-M-S-opacityWindow-low";
+        case middleEnum:
+            return "MPPL-M-S-opacityWindow-medium";
+        case highEnum:
+            return "MPPL-M-S-opacityWindow-high";
+        case ultraEnum:
+            return "MPPL-M-S-opacityWindow-ultra";
+        case PonyTownEnum:
+            return "";
+    }
+}
+function ReturnExFilterGame(Enum)
+{
+    switch(Enum)
+    {
+        case noneEnum:
+            return "MPPL-M-S-filterGame-none";
+        case lowEnum:
+            return "MPPL-M-S-filterGame-low";
+        case middleEnum:
+            return "MPPL-M-S-filterGame-medium";
+        case highEnum:
+            return "MPPL-M-S-filterGame-high";
+        case ultraEnum:
+            return "MPPL-M-S-filterGame-ultra";
+    }
+}
+function ReturnFilterGame(Enum)
+{
+    switch(Enum)
+    {
+        case blurE:
+            return "MPPL-S-filterGame-blur";
+        case brightness:
+            return "MPPL-S-filterGame-brightness";
+        case contrast:
+            return "MPPL-S-filterGame-contrast";
+        case grayscale:
+            return "MPPL-S-filterGame-grayscale";
+        case hueRotate:
+            return "MPPL-S-filterGame-hueRotate";
+        case invert:
+            return "MPPL-S-filterGame-invert";
+        case sepia:
+            return "MPPL-S-filterGame-sepia";
+        case noneEnum:
+            return "MPPL-S-filterGame-none";
+    }
+}
+
+
+
 let friends = new Array();
 let favourites = new Array();
 let settingsData = new Settings();
 
-let versionPlugin = "1.1.0";
+let versionPlugin = "1.2.0";
 let linkToAuthor = "https://www.youtube.com/channel/UC-X7_-qML3aXqrDQ2UKLFkA";
+
+let needToUpdate = false;
+let dataUpdate;
 
 function Friend(userEl) {
     this.element = userEl;
@@ -48,6 +163,17 @@ function Settings()
     this.darkTheme = false;
     this.squareImage = false;
 
+    this.roundnessWindow = PonyTownEnum;
+
+    this.blurBackground = noneEnum;
+    this.blurForDropdown = false;
+
+    this.opacityWindow = PonyTownEnum;
+    this.opacityInputs = false;
+
+    this.gameFilter = noneEnum;
+    this.exGameFilter = lowEnum;
+
     this.setData = function()
     {
         chrome.storage.local.set({ "MPPL-settings-data": settingsData }, function () {
@@ -66,8 +192,80 @@ function Settings()
             body.classList.add("MPPL-S-square-portrait");
         else
             body.classList.remove("MPPL-S-square-portrait");
+
+        if(this.blurForDropdown)
+            body.classList.add("MPPL-M-S-BlurForDropdown");
+        else
+        body.classList.remove("MPPL-M-S-BlurForDropdown");
+        
+        this.setBorderRadius(this.roundnessWindow, true);
+        this.setBlurBackground(this.blurBackground, true);
+        this.setOpacityWindow(this.opacityWindow, true);
+        this.setGameFilter(this.gameFilter, true);
+        this.setExGameFilter(this.exGameFilter, true);
+
+
         console.log(settingsData);
         console.log("Settings applied");
+    }
+
+    this.setBorderRadius = function(enumValue, start = false)
+    {
+        if(start)
+            this.setSpecialSetting(enumValue, this.roundnessWindow, ReturnBorderRound, start);
+        else
+            settingsData.roundnessWindow = settingsData.setSpecialSetting(enumValue, settingsData.roundnessWindow, ReturnBorderRound, start);
+    }
+    this.setBlurBackground = function(enumValue, start = false)
+    {
+        if(start)
+            this.setSpecialSetting(enumValue, this.blurBackground, ReturnBackgroundBlur, start);
+        else
+            settingsData.blurBackground = settingsData.setSpecialSetting(enumValue, settingsData.blurBackground, ReturnBackgroundBlur, start);
+    }
+    this.setOpacityWindow = function(enumValue, start = false)
+    {
+        if(start)
+            this.setSpecialSetting(enumValue, this.opacityWindow, ReturnOpacityWindow, start);
+        else
+            settingsData.opacityWindow = settingsData.setSpecialSetting(enumValue, settingsData.opacityWindow, ReturnOpacityWindow, start);
+    }
+    this.setGameFilter = function(enumValue, start = false)
+    {
+        if(start)
+            this.setSpecialSetting(enumValue, this.gameFilter, ReturnFilterGame, start);
+        else
+            settingsData.gameFilter = settingsData.setSpecialSetting(enumValue, settingsData.gameFilter, ReturnFilterGame, start);
+    }
+    this.setExGameFilter = function(enumValue, start = false)
+    {
+        if(start)
+            this.setSpecialSetting(enumValue, this.exGameFilter, ReturnExFilterGame, start);
+        else
+            settingsData.exGameFilter = settingsData.setSpecialSetting(enumValue, settingsData.exGameFilter, ReturnExFilterGame, start);
+    }
+    
+
+    this.setSpecialSetting = function(enumValue, settingValue, ReturnFunc, start)
+    {
+        enumValue = parseInt(enumValue);
+        let roundVal = ReturnFunc(enumValue);
+        console.log(settingValue);
+        if(start)
+        {
+            if(roundVal != 0)
+                document.body.classList.add(roundVal);
+        }
+        else
+        {
+            if(settingValue != 0)
+                document.body.classList.remove(ReturnFunc(settingValue));
+
+            if(roundVal != 0)
+                document.body.classList.add(roundVal);
+            
+            return enumValue;
+        }
     }
 }
 
@@ -83,8 +281,29 @@ catch
 try {
     console.log("Checking....");
     chrome.storage.local.get(["MPPL-settings-data"], function (items) {
-        settingsData.darkTheme = items["MPPL-settings-data"].darkTheme;
-        settingsData.squareImage = items["MPPL-settings-data"].squareImage;
+
+        function checkSetting(setting, standartValue)
+        {
+            if(setting == undefined)
+            {
+                return standartValue;
+            }
+            else
+            {
+                return setting;
+            }
+        }
+
+        settingsData.darkTheme = checkSetting(items["MPPL-settings-data"].darkTheme, new Settings().darkTheme);
+        settingsData.squareImage = checkSetting(items["MPPL-settings-data"].squareImage, new Settings().squareImage);
+        settingsData.roundnessWindow = checkSetting(items["MPPL-settings-data"].roundnessWindow, new Settings().roundnessWindow);
+        settingsData.blurBackground = checkSetting(items["MPPL-settings-data"].blurBackground, new Settings().blurBackground);
+        settingsData.blurForDropdown = checkSetting(items["MPPL-settings-data"].blurForDropdown, new Settings().blurForDropdown);
+        settingsData.opacityWindow = checkSetting(items["MPPL-settings-data"].opacityWindow, new Settings().opacityWindow);
+        settingsData.opacityInputs = checkSetting(items["MPPL-settings-data"].opacityInputs, new Settings().opacityInputs);
+
+        settingsData.gameFilter = checkSetting(items["MPPL-settings-data"].gameFilter, new Settings().gameFilter);
+        settingsData.exGameFilter = checkSetting(items["MPPL-settings-data"].exGameFilter, new Settings().exGameFilter);
 
         settingsData.applySettings();
     });
@@ -102,16 +321,34 @@ function standartSetting()
     settingsData.applySettings();
 }
 
-$(document).ready(function () {
+$(document).ready(function () {   
+    
 
-    let footerAppend = '<div class="app-version">Plugin Pony Town UI: <b>' + versionPlugin +'</b><div class="text-nowrap d-inline d-sm-block">by <a target="_blank" href="'+ linkToAuthor +'">Mariana Ponyriama</a></div></div>';
-    $("footer").append(footerAppend);
+
+    function FooterAppend(footer)
+    {
+        $(footer).append('<div class="app-version"><div class="MPPL-footer-text">Plugin Pony Town UI: <b>' + versionPlugin +'</b></div><div class="text-nowrap d-inline d-sm-block">by <a target="_blank" href="'+ linkToAuthor +'">Mariana Ponyriama</a></div></div>');
+    }
+    function UpdateAppend(target)
+    {
+        if(needToUpdate)
+        {
+            $(target).append("<span class='MPPL-update-avaible'>Update!</span>");
+
+            $(".MPPL-update-avaible").click(function()
+            {
+                CreateUpdateWindow();
+            });
+        }
+    }
+    FooterAppend($('footer'));
     
 
     $(document).on("DOMNodeInserted", function (e) {
         if($(e.target).is("footer"))
         {
-            $(e.target).append(footerAppend);
+            FooterAppend(e.target);
+            UpdateAppend($(".MPPL-footer-text"));
         }
         if($(e.target).hasClass("modal"))
         {
@@ -119,7 +356,7 @@ $(document).ready(function () {
 
             $("#MPPL-setting-plugin").click(function()
             {
-                $("body").append('<div class="MPPL-container"><div class="MPPL-settings"><div class="MPPL-modal-header">Settings for Plugin</div><div class="MPPL-modal-content"></div><div class="MPPL-modal-footer"><div class="MPPL-left"><div class="MPPL-version-setting">Version '+ versionPlugin +' by <a href="'+ linkToAuthor +'" target="_blank">Mariana Ponyriama</a></div></div><div class="MPPL-right"><button type="button" class="btn" id="MPPL-reset-plugin">Reset</button><button type="button" class="btn" id="MPPL-close-plugin">Close</button></div></div></div></div>');
+                $("body").append('<div class="MPPL-container"><div class="MPPL-Window MPPL-settings"><div class="MPPL-modal-header">Settings for Plugin</div><div class="MPPL-modal-content"></div><div class="MPPL-modal-footer"><div class="MPPL-left"><div class="MPPL-version-setting">Version '+ versionPlugin +' by <a href="'+ linkToAuthor +'" target="_blank">Mariana Ponyriama</a></div></div><div class="MPPL-right"><button type="button" class="btn" id="MPPL-reset-plugin">Reset</button><button type="button" class="btn" id="MPPL-close-plugin">Close</button></div></div></div></div>');
 
                 $("#MPPL-close-plugin").click(function()
                 {
@@ -131,6 +368,8 @@ $(document).ready(function () {
                     standartSetting();
                     $(".MPPL-container").remove();
                 });
+
+                UpdateAppend($(".MPPL-version-setting"));
 
                 // Тёмная тема
                 itemSettingsCheckbox("darkTheme", "Dark mode", function()
@@ -144,7 +383,7 @@ $(document).ready(function () {
                     settingsData.applySettings();
                 }, settingsData.darkTheme, "Turns on dark mode in the game interface");
 
-                // Закруглённость
+                // Закруглённость в портрете
                 itemSettingsCheckbox("squarePortrait", "Square portrait", function()
                 {
                     settingsData.squareImage = true;
@@ -156,12 +395,117 @@ $(document).ready(function () {
                     settingsData.applySettings();
                 }, settingsData.squareImage, "Rounded square character's icons");
 
+                itemSettingsSelect("customRoundnessBorder", "Custom border", settingsData.roundnessWindow, settingsData.setBorderRadius, "A certain type of roundness", new SelectedElement("Pony Town", PonyTownEnum), new SelectedElement("None", noneEnum), new SelectedElement("Small", lowEnum), new SelectedElement("Medium", middleEnum), new SelectedElement("Strong", highEnum), new SelectedElement("Super", ultraEnum));
+
+                
+                let blurCheckbox;
+                if(settingsData.blurBackground == noneEnum)
+                        blurCheckbox = false;
+                    else
+                        blurCheckbox = true;
+                itemSettingsCheckbox("blurbackgroundCheckpoint", "Blur for background", function()
+                {
+                    
+                    settingsData.setBlurBackground(lowEnum)
+                    settingsData.setData();
+                    settingsData.applySettings();
+                }, function(){
+                    settingsData.setBlurBackground(noneEnum)
+                    settingsData.setData();
+                    settingsData.applySettings();
+                }, blurCheckbox, "Blur effect on the background of windows");
+
+
+                // ПОЗДНЕЕ ПОСЛЕ OPACITY DROPDOWN
+                /* itemSettingsCheckbox("blurForDropdown", "Dropdown menu options", function()
+                {
+                    settingsData.blurForDropdown = true;
+                    settingsData.setData();
+                    settingsData.applySettings();
+                }, function(){
+                    settingsData.blurForDropdown = false;
+                    settingsData.setData();
+                    settingsData.applySettings();
+                }, settingsData.blurForDropdown, "Blur effect on the background of options menu"); */
+                itemSettingsSelect("customBackgroundBlur", "Custom Blur", settingsData.blurBackground, settingsData.setBlurBackground, "Degree of blur effect", new SelectedElement("Low", lowEnum), new SelectedElement("Medium", middleEnum), new SelectedElement("High", highEnum));
+
+                /* linkToOtherItem("blurForDropdown", "blurbackgroundCheckpoint", true); */
+                linkToOtherItem("customBackgroundBlur", "blurbackgroundCheckpoint", true);
+
+                let opacityCheckbox;
+                if(settingsData.opacityWindow == PonyTownEnum)
+                        opacityCheckbox = false;
+                    else
+                        opacityCheckbox = true;
+                itemSettingsCheckbox("opacityWindow", "Custom transparency of windows", function()
+                {
+                    settingsData.setOpacityWindow(lowEnum)
+                    settingsData.setData();
+                    settingsData.applySettings();
+                },
+                function()
+                {
+                    settingsData.setOpacityWindow(PonyTownEnum)
+                    settingsData.setData();
+                    settingsData.applySettings();
+                }, opacityCheckbox, "Choosing the transparency of windows and dropdown lists");
+                itemSettingsSelect("customOpacityWindow", "Custom transparency", settingsData.opacityWindow, settingsData.setOpacityWindow, "Degree of transparency effect", new SelectedElement("Low", lowEnum), new SelectedElement("Medium", middleEnum), new SelectedElement("High", highEnum), new SelectedElement("Full", ultraEnum));
+
+                linkToOtherItem("customOpacityWindow", "opacityWindow", true);
+
+
+                let checkboxFilterGame;
+                if(settingsData.gameFilter == noneEnum)
+                    checkboxFilterGame = false;
+                else
+                    checkboxFilterGame = true;
+
+                itemSettingsCheckbox("usegamefilter", "Game Filters", function()
+                {
+                    settingsData.setGameFilter(brightness);
+                    settingsData.setExGameFilter(lowEnum);
+                    settingsData.setData();
+                    settingsData.applySettings();
+                }, function()
+                {
+                    settingsData.setGameFilter(noneEnum);
+                    settingsData.setExGameFilter(noneEnum);
+                    settingsData.setData();
+                    settingsData.applySettings();
+                }, checkboxFilterGame, "Filters that change the image of the game");
+                itemSettingsSelect("selectfilter", "Filter", settingsData.gameFilter, settingsData.setGameFilter, "Filter type", new SelectedElement("Brightness", brightness), new SelectedElement("Blur", blurE), new SelectedElement("Contrast", contrast), new SelectedElement("Grayscale", grayscale), new SelectedElement("Hue", hueRotate), new SelectedElement("Invert", invert), new SelectedElement("Sepia", sepia));
+                itemSettingsSelect("selectExFilter", "Filter power", settingsData.exGameFilter, settingsData.setExGameFilter, "The strength of the selected parameter is higher", new SelectedElement("Low", lowEnum), new SelectedElement("Medium", middleEnum), new SelectedElement("High", highEnum), new SelectedElement("Ultra", ultraEnum));
+
+                linkToOtherItem("selectfilter", "usegamefilter", true);
+                linkToOtherItem("selectExFilter", "usegamefilter", true);
+
+                
+                function linkToOtherItem(idItem, idFromLinkItem, valForIt)
+                {
+                    let item = document.getElementById(idItem + "-item");
+                    let FromLink = document.getElementById(idFromLinkItem);
+
+                    $(item).addClass("MPPL-link-item")
+                    if(FromLink.checked != valForIt)
+                        $(item).addClass("hide");
+                    
+                    $(FromLink).click(function(){
+                        if(FromLink.checked == valForIt)
+                        {
+                            $(item).removeClass("hide");
+                        }
+                        else
+                        {
+                            $(item).addClass("hide");
+                        }
+                    });
+                }
                 function itemSettingsCheckbox(id, label, func, unfunc, settedValue, sublabel = "")
                 {
-                    $(".MPPL-modal-content").append('<div class="item" id="'+ id + '-item' +'"><div class="top"><input type="checkbox" name="" id="'+ id +'"><label for="'+ id +'">'+ label +'</label></div></div>');
+                    $(".MPPL-modal-content").append('<div class="item" id="'+ id + '-item' +'"><div class="left"><div class="top"><label for="'+ id +'">'+ label +'</label></div></div><div class="right"><input type="checkbox" name="" id="'+ id +'"></div></div>');
                     if(sublabel != "")
                     {
-                        $(document.getElementById(id + "-item")).append('<div class="subtop"><label for="'+ id +'">'+ sublabel +'</label></div>');
+                        $(document.getElementById(id + "-item")).children(".left").append('<div class="subtop"><label for="'+ id +'">'+ sublabel +'</label></div>');
                     }
                     if(settedValue)
                     {
@@ -179,6 +523,36 @@ $(document).ready(function () {
                               unfunc();
                           }
                     })
+                }
+                function itemSettingsSelect(id, label, settedValue, funcWithParametr, sublabel = "", ...Elements)
+                {
+                    $(".MPPL-modal-content").append('<div class="item" id="'+ id + '-item' +'"><div class="left"><div class="top"><label>'+ label +'</label></div></div><div class="right"><select id="'+ id +'"></select></div></div>');
+                    if(sublabel != "")
+                    {
+                        $(document.getElementById(id + "-item")).children(".left").append('<div class="subtop"><label>'+ sublabel +'</label></div>');
+                    }
+                    for(let i = 0; i < Elements.length; i++)
+                    {
+                        if(Elements[i].option == settedValue)
+                        {
+                            $(document.getElementById(id)).append('<option selected value="'+ Elements[i].option +'">'+ Elements[i].text +'</option>')
+                        }
+                        else
+                        {
+                            $(document.getElementById(id)).append('<option value="'+ Elements[i].option +'">'+ Elements[i].text +'</option>')
+                        }
+                    }
+                    $(document.getElementById(id)).on("change", function()
+                    {
+                        let val = $(document.getElementById(id)).val();
+                        funcWithParametr(val);
+                        settingsData.setData();
+                    });
+                }
+                function SelectedElement(text, option)
+                {
+                    this.text = text;
+                    this.option = option;
                 }
             });
         }
@@ -289,10 +663,40 @@ $(document).ready(function () {
 
             });
         }
-
-        
-
     });
 
+    
+    function CreateUpdateWindow()
+    {
+        $("body").prepend('<div class="MPPL-container MPPL-Update-Container"><div class="MPPL-Window"><div class="MPPL-modal-header">New Update '+ dataUpdate["UpdatedVersion"] +' for plugin</div><div class="MPPL-modal-content"><div class="MPPL-Update-Img"><img src="' + dataUpdate["UpdatedImage"] +'" alt=""></div><div class="MPPL-title-update">'+ dataUpdate["UpdatedHead"] +'</div><div class="MPPL-list-of-updates"><ul></ul></div></div><div class="MPPL-modal-footer"><div class="MPPL-left"><button class="btn" id="MPPL-close-update">Close</button></div><div class="MPPL-right"><a href="https://stepan323446.github.io/Pony-UI-Plugin-Update/" target="_blank" class="btn">How to update plugin</a><a href="'+ dataUpdate["UpdatedLink"] +'" target="_blank" class="btn MPPL-btn-update">Update!</a></div></div></div></div>');
 
+        $("#MPPL-close-update").click(function()
+        {
+            $(".MPPL-Update-Container").remove();
+        });
+
+
+        for(let i = 0; i < dataUpdate["UpdatedItems"].length; i++)
+        {
+            $(".MPPL-list-of-updates ul").append('<li>' + dataUpdate["UpdatedItems"][i]["text_content"] +'</li>');
+        }
+    }
+
+    $.ajax({
+        url: 'https://stepan323446.github.io/Pony-UI-Plugin-Update/update.json',
+        type: "GET",
+        async: true,
+        success: function(data)
+        {
+            dataUpdate = data;
+
+            if(versionPlugin != dataUpdate["UpdatedVersion"])
+            {
+                needToUpdate = true;
+                CreateUpdateWindow();
+                UpdateAppend($(".MPPL-footer-text"));
+            }
+        }
+   });
+    
 });
