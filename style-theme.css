@@ -50,6 +50,13 @@
     
     
 }
+#MPPL-searchFriend
+{
+    margin: 10px 0;
+    order: 2;
+    background-color: #fff !important;
+    border-color: #c2c2c2 !important;
+}
 .dropdown-menu-right
 {
     animation: anim-friend 0.3s ease;
@@ -132,13 +139,7 @@ settings-box
 {
     z-index: 0 !important;
 }
-#MPPL-searchFriend
-{
-    margin: 10px 0;
-    order: 2;
-    background-color: #fff !important;
-    border-color: #c2c2c2 !important;
-}
+
 #MPPL-searchFriend.hide
 {
     display: none;
@@ -163,11 +164,12 @@ settings-box
 {
     opacity: 0.5;
 }
-.MPPL-S-DarkTheme .friends-dropdown-menu .form-control,
+.MPPL-S-DarkTheme .friends-dropdown-menu #MPPL-searchFriend,
 .MPPL-S-DarkTheme .character-select-search > .form-control[type="search"]
 {
     background-color: #222 !important;
     color: #ddd !important;
+    border: 1px solid #242424 !important;
 }
 .MPPL-S-DarkTheme .character-select-search > .form-control[type="search"]
 {
@@ -177,7 +179,7 @@ settings-box
 {
     border: none !important;
 }
-.MPPL-S-DarkTheme .friends-dropdown-menu .form-control:focus,
+.MPPL-S-DarkTheme .friends-dropdown-menu #MPPL-searchFriend:focus,
 .MPPL-S-DarkTheme .character-select-search > .form-control[type="search"]:focus
 {
     border: 1px solid #333 !important;
@@ -249,10 +251,14 @@ settings-box
     fill: #cecece;
 }
 .MPPL-addFav:hover
+{ 
+    cursor: pointer;
+}
+.MPPL-addFav:hover svg
 {
     fill: rgb(243, 255, 175);
 }
-.MPPL-S-DarkTheme .MPPL-addFav:hover
+.MPPL-S-DarkTheme .MPPL-addFav:hover svg
 {
     fill: rgb(247, 255, 202);
 }
@@ -287,14 +293,19 @@ settings-box
 {
     fill: rgb(240, 255, 34);
 }
-.friends-item:hover .MPPL-addFav
+
+.friends-item:not(.editing-note):hover .MPPL-addFav
 {
     width: auto;
     padding: 9px;
 }
-.friends-item:hover .MPPL-addFav svg
+.friends-item:not(.editing-note):hover .MPPL-addFav svg
 {
     width: 100%;
+}
+.MPPL-S-DarkTheme .friends-item button:hover
+{
+    background: #7a7a7a !important;
 }
 
 
@@ -369,6 +380,10 @@ settings-box
     padding-bottom: 10px !important;
     transition: 0.2s ease;
 }
+.MPPL-S-DarkTheme .slider-bar-fill
+{
+    background: linear-gradient(90deg, rgba(34,35,164,1) 0%, rgba(83,52,223,1) 100%) !important;
+}
 /* Pony Profile */
 .MPPL-S-DarkTheme .portrait-box-cover
 {
@@ -411,6 +426,10 @@ settings-box
 #pony-box .dropdown-toggle
 {
     transition: 0.3s ease;
+}
+.MPPL-S-DarkTheme .dropdown-item-text
+{
+    color: #fff !important;
 }
 .MPPL-S-DarkTheme #pony-box .dropdown-toggle:hover
 {
@@ -707,6 +726,8 @@ settings-modal .nav.nav-pills button:nth-child(7)::before{
 {
     display: none;
 }
+
+
 
 
 /* For Settings */

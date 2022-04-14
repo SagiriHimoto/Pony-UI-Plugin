@@ -1,5 +1,5 @@
 {
-    "manifest_version": 2,
+    "manifest_version": 3,
     "name": "Pony Town UI",
     "version": "1.2.0",
     "description": "Change UI Interface for game Pony Town by Mariana Ponyriama",
@@ -30,7 +30,10 @@
         }
     ],
     "web_accessible_resources": [
-        "images/*"
+        {
+            "resources": ["images/*"],
+            "matches": ["<all_urls>"]
+        }
     ],
     "permissions": [
         "storage"
