@@ -116,7 +116,7 @@ let favourites = new Array();
 let settingsData = new Settings();
 
 let versionPlugin = "1.2.0";
-let linkToAuthor = "https://www.youtube.com/channel/UC-X7_-qML3aXqrDQ2UKLFkA";
+let linkToAuthor = "https://stepan323446.github.io/Pony-UI-Plugin-Update/";
 
 let needToUpdate = false;
 let dataUpdate;
